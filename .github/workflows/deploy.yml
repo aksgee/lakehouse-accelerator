@@ -37,6 +37,11 @@ jobs:
           chmod +x "$RUNNER_TEMP/.bin/databricks"
           echo "$RUNNER_TEMP/.bin" >> $GITHUB_PATH
 
+      - name: Install uv (Python package manager)
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
       - name: Confirm Databricks environment variables
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
