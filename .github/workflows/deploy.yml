@@ -21,24 +21,31 @@ jobs:
       - name: Create virtual environment
         run: python -m venv .venv
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           . .venv/bin/activate
           pip install -r requirements.txt
-          pip install databricks --upgrade --extra-index-url https://pypi.databricks.com/simple
 
-      - name: Configure Databricks CLI (new CLI)
+      - name: Install Databricks CLI (binary release)
+        shell: bash
+        run: |
+          set -e
+          VERSION="0.274.0"
+          FILE="databricks_cli_${VERSION}_linux_amd64"
+          curl -fsSL -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
+          unzip -q "${FILE}.zip" -d $RUNNER_TEMP/.bin
+          chmod +x "$RUNNER_TEMP/.bin/databricks"
+          echo "$RUNNER_TEMP/.bin" >> $GITHUB_PATH
+
+      - name: Configure Databricks CLI
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          . .venv/bin/activate
           mkdir -p ~/.databricks
           echo "[default]" > ~/.databricks/config
           echo "host = $DATABRICKS_HOST" >> ~/.databricks/config
           echo "token = $DATABRICKS_TOKEN" >> ~/.databricks/config
 
       - name: Validate Databricks bundle
-        run: |
-          . .venv/bin/activate
-          databricks bundle validate --target dev
+        run: databricks bundle validate --target dev
