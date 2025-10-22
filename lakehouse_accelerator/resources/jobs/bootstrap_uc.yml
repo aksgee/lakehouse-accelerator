@@ -6,8 +6,8 @@ resources:
         - job_cluster_key: bootstrap_cluster
           new_cluster:
             spark_version: 13.3.x-scala2.12
-            node_type_id: i3.xlarge
-            num_workers: 4
+            compute: SERVERLESS
+
       tasks:
         - task_key: setup_unity_catalog
           job_cluster_key: bootstrap_cluster
