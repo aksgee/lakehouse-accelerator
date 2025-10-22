@@ -31,14 +31,17 @@ jobs:
           . .venv/bin/activate
           pip install databricks-cli
 
-      - name: Configure Databricks CLI
+      - name: Configure Databricks CLI (non-interactive)
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           . .venv/bin/activate
-          databricks configure --token <<< "${DATABRICKS_HOST}\n${DATABRICKS_TOKEN}"
-
+          mkdir -p ~/.databricks
+          echo "[default]" > ~/.databricks/config
+          echo "host = $DATABRICKS_HOST" >> ~/.databricks/config
+          echo "token = $DATABRICKS_TOKEN" >> ~/.databricks/config
+  
       - name: Validate Databricks bundle
         run: |
           . .venv/bin/activate
