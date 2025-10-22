@@ -4,11 +4,12 @@ resources:
       name: bootstrap_uc
       tasks:
         - task_key: setup_unity_catalog
-          compute: SERVERLESS
+          new_cluster:
+            spark_version: 13.3.x-scala2.12
+            node_type_id: SERVERLESS
           python_wheel_task:
             package_name: lakehouse_accelerator
             entry_point: bootstrap_uc
             parameters:
               - --config
               - configs/uc_config.yaml
-
