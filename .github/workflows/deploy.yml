@@ -25,9 +25,9 @@ jobs:
         run: |
           . .venv/bin/activate
           pip install -r requirements.txt
-          pip install databricks-cli --extra-index-url https://pypi.databricks.com/simple
+          pip install databricks --upgrade --extra-index-url https://pypi.databricks.com/simple
 
-      - name: Configure Databricks CLI (new SDK)
+      - name: Configure Databricks CLI (new CLI)
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
