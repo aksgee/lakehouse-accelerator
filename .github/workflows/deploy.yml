@@ -63,7 +63,6 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          cd lakehouse_accelerator
           databricks bundle deploy --target dev
 
       - name: Run Databricks bundle
