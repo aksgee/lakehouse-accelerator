@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+.venv/
+
+# Databricks Asset Bundles
+.databricks/
+
+# VS Code
+.vscode/
+
+# Wheel files
+*.whl
+
+# OS files
+.DS_Store
+Thumbs.db
+
+

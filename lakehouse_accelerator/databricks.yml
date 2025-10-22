@@ -1,0 +1,36 @@
+bundle:
+  name: lakehouse_accelerator
+  uuid: 8be560ee-8ee8-4149-9fd4-05d1ec61601d
+
+variables:
+  uc_catalog:
+    description: "Unity Catalog catalog name"
+    type: complex
+  sp_id:
+    description: "User or service principal for grants"
+    type: complex
+  workspace_region:
+    description: "Region of the workspace"
+    type: complex
+
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+include:
+  - configs/*.yaml
+  - resources/jobs/*.yml
+
+targets:
+  dev:
+    workspace:
+      host: https://dbc-7ed9b5cf-407e.cloud.databricks.com/
+    variables:
+      workspace_region:
+        value: us-west-2
+      uc_catalog:
+        value: lakehouse_catalog
+      sp_id:
+        value: emegirdigital@outlook.com
