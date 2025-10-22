@@ -48,4 +48,6 @@ jobs:
           echo "token = $DATABRICKS_TOKEN" >> ~/.databricks/config
 
       - name: Validate Databricks bundle
-        run: databricks bundle validate --target dev
+        run: |
+          cd lakehouse_accelerator
+          databricks bundle validate --target dev
