@@ -1,4 +1,3 @@
-databricks-cli
 databricks-sdk
 pyyaml
 requests
