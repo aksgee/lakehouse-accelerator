@@ -37,17 +37,34 @@ jobs:
           chmod +x "$RUNNER_TEMP/.bin/databricks"
           echo "$RUNNER_TEMP/.bin" >> $GITHUB_PATH
 
-      - name: Configure Databricks CLI
+      - name: Confirm Databricks environment variables
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          mkdir -p ~/.databricks
-          echo "[default]" > ~/.databricks/config
-          echo "host = $DATABRICKS_HOST" >> ~/.databricks/config
-          echo "token = $DATABRICKS_TOKEN" >> ~/.databricks/config
+          echo "Databricks host: $DATABRICKS_HOST"
+          echo "Databricks token is set: ${#DATABRICKS_TOKEN} characters"
 
       - name: Validate Databricks bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           cd lakehouse_accelerator
           databricks bundle validate --target dev
+
+      - name: Deploy Databricks bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          cd lakehouse_accelerator
+          databricks bundle deploy --target dev
+
+      - name: Run Databricks bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          cd lakehouse_accelerator
+          databricks bundle run --target dev
