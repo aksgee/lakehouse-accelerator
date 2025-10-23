@@ -1,15 +1,13 @@
 catalogs:
-  - name: ${var.uc_catalog}
+  - name: dev_catalog
     comment: "Lakehouse accelerator catalog"
 
 schemas:
   - name: bronze
-    catalog: ${var.uc_catalog}
-  - name: silver
-    catalog: ${var.uc_catalog}
-  - name: gold
-    catalog: ${var.uc_catalog}
+    catalog: dev_catalog
 
-grants:
-  - principal: ${var.sp_id}
-    privileges: ["USE CATALOG", "CREATE SCHEMA", "CREATE TABLE", "SELECT"]
+  - name: silver
+    catalog: dev_catalog
+
+  - name: gold
+    catalog: dev_catalog

@@ -1,44 +1,34 @@
-import argparse
+import click
 import yaml
 from databricks.sdk import WorkspaceClient
-from databricks.sdk.errors import NotFound
 
-def bootstrap_uc(config_path: str):
-    with open(config_path, "r") as f:
-        config = yaml.safe_load(f)
-
+@click.command()
+@click.option("--structure", required=True, help="Path to YAML file with catalog + schema structure")
+def main(structure):
     w = WorkspaceClient()
+    with open(structure, "r") as f:
+        cfg = yaml.safe_load(f)
 
-    for catalog in config.get("catalogs", []):
+    for catalog in cfg.get("catalogs", []):
         name = catalog["name"]
+        comment = catalog.get("comment", "")
         try:
-            w.catalogs.get(name)
-            print(f"Catalog '{name}' already exists. Skipping.")
-        except NotFound:
-            print(f"Creating catalog '{name}'...")
-            w.catalogs.create(name=name, comment=catalog.get("comment", ""))
+            w.catalogs.get(name=name)
+            print(f"Catalog '{name}' already exists.")
+        except:
+            w.catalogs.create(name=name, comment=comment)
+            print(f"Catalog '{name}' created.")
 
-    for schema in config.get("schemas", []):
+    for schema in cfg.get("schemas", []):
         name = schema["name"]
-        catalog_name = schema["catalog"]
+        catalog = schema["catalog"]
+        full_name = f"{catalog}.{name}"
         try:
-            w.schemas.get(catalog_name=catalog_name, schema_name=name)
-            print(f"Schema '{catalog_name}.{name}' already exists. Skipping.")
-        except NotFound:
-            print(f"Creating schema '{catalog_name}.{name}'...")
-            w.schemas.create(name=name, catalog_name=catalog_name)
-
-    for grant in config.get("grants", []):
-        principal = grant["principal"]
-        privileges = grant["privileges"]
-        catalog_name = config["catalogs"][0]["name"]
-        print(f"Applying grants to '{principal}' on '{catalog_name}'...")
-        w.grants.update(principal=principal, privileges=privileges, catalog=catalog_name)
-
-    print("✅ Unity Catalog bootstrap completed.")
+            w.schemas.get(full_name)
+            print(f"Schema '{full_name}' already exists.")
+        except:
+            w.schemas.create(name=name, catalog_name=catalog)
+            print(f"Schema '{full_name}' created.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", required=True)
-    args = parser.parse_args()
-    bootstrap_uc(args.config)
+    main()

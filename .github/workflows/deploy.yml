@@ -25,6 +25,7 @@ jobs:
         run: |
           . .venv/bin/activate
           pip install -r requirements.txt
+          pip install databricks-sdk pyyaml
 
       - name: Install Databricks CLI (binary release)
         shell: bash

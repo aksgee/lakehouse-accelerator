@@ -3,16 +3,15 @@ bundle:
   uuid: 8be560ee-8ee8-4149-9fd4-05d1ec61601d
 
 variables:
-  uc_catalog:
-    description: "Unity Catalog catalog name"
-    type: complex
-  sp_id:
-    description: "User or service principal for grants"
-    type: complex
-  workspace_region:
-    description: "Region of the workspace"
-    type: complex
-
+  existing_cluster_id:
+    description: "Cluster ID for serverless execution"
+    type: string
+  uc_structure_path:
+    description: "Path to YAML file with catalog + schema structure"
+    type: string
+  grants_path:
+    description: "Path to YAML file with grant definitions"
+    type: string
 
 artifacts:
   python_artifact:
@@ -28,9 +27,6 @@ targets:
     workspace:
       host: https://dbc-7ed9b5cf-407e.cloud.databricks.com/
     variables:
-      workspace_region:
-        value: us-west-2
-      uc_catalog:
-        value: lakehouse_catalog
-      sp_id:
-        value: emegirdigital@outlook.com
+      existing_cluster_id: 1016-154509-mc97muux
+      uc_structure_path: configs/uc_config.yaml
+      grants_path: configs/dev_uc_grants.yaml
