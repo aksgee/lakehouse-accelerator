@@ -5,8 +5,8 @@ on:
     branches: [main]
     paths:
       - lakehouse_accelerator/resources/jobs/bootstrap_uc.yml
-      - lakehouse_accelerator/configs/uc_config.yaml
-      - lakehouse_accelerator/configs/dev_uc_grants.yaml
+      - lakehouse_accelerator/config/uc_config.yaml
+      - lakehouse_accelerator/config/dev_uc_grants.yaml
       - lakehouse_accelerator/src/lakehouse_accelerator/bootstrap_uc.py
       - lakehouse_accelerator/src/lakehouse_accelerator/apply_grants.py
 
