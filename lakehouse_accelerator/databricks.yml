@@ -9,6 +9,9 @@ variables:
   grants_path:
     description: "Path to YAML file with grant definitions"
     type: complex
+  uc_catalog_location:
+    description: "Base S3 path for catalog storage"
+    type: complex
 
 include:
   - configs/*.yaml
@@ -25,3 +28,4 @@ targets:
     variables:
       uc_structure_path: ../../config/uc_config.yaml
       grants_path: ../../config/dev_uc_grants.yaml
+      uc_catalog_location: S3://dbstorage-prod-9gfp2/uc/f8aa13cb-9fb6-4dae-8b04-9e74065f44f0/fe6edbd5-1ed3-4a0d-9af1-1a827348f89b/__unitystorage/catalogs
