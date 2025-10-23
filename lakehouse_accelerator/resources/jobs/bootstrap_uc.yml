@@ -3,20 +3,9 @@ resources:
     bootstrap_uc:
       name: bootstrap_uc
 
-      job_clusters:
-        - job_cluster_key: serverless_cluster
-          new_cluster:
-            spark_version: 13.3.x-scala2.12
-            runtime_engine: PHOTON
-            num_workers: 1
-            autoscale:
-              min_workers: 1
-              max_workers: 2
-            data_security_mode: SINGLE_USER
-
       tasks:
         - task_key: create_uc_structure
-          job_cluster_key: serverless_cluster
+          job_cluster_key: serverless
           python_wheel_task:
             package_name: lakehouse_accelerator
             entry_point: bootstrap_uc
@@ -26,8 +15,8 @@ resources:
 
         - task_key: apply_grants
           depends_on:
-            create_uc_structure: {}
-          job_cluster_key: serverless_cluster
+            - create_uc_structure
+          job_cluster_key: serverless
           python_wheel_task:
             package_name: lakehouse_accelerator
             entry_point: apply_grants
