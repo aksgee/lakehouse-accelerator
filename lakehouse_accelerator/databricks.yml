@@ -16,7 +16,7 @@ include:
 
 sync:
   include:
-    - src/lakehouse_accelerator/*.py
+    - ./src/lakehouse_accelerator/*.py
 
 targets:
   dev:
