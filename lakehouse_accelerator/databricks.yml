@@ -4,14 +4,14 @@ bundle:
 
 variables:
   existing_cluster_id:
-    description: "Cluster ID for serverless execution"
-    type: string
+    description: "Cluster ID (unused in serverless)"
+    type: complex
   uc_structure_path:
     description: "Path to YAML file with catalog + schema structure"
-    type: string
+    type: complex
   grants_path:
     description: "Path to YAML file with grant definitions"
-    type: string
+    type: complex
 
 artifacts:
   python_artifact:
@@ -27,6 +27,6 @@ targets:
     workspace:
       host: https://dbc-7ed9b5cf-407e.cloud.databricks.com/
     variables:
-      existing_cluster_id: 1016-154509-mc97muux
+      existing_cluster_id: "unused"
       uc_structure_path: configs/uc_config.yaml
       grants_path: configs/dev_uc_grants.yaml
