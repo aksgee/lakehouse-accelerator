@@ -21,24 +21,27 @@ def main():
 
     for grant in grant_defs:
         principal = grant["principal"]
-        privileges = grant["privileges"]
+        catalog_privs = grant.get("catalog_privileges", [])
+        schema_privs = grant.get("schema_privileges", [])
 
         for catalog in catalog_names:
-            sql = f"GRANT {', '.join(privileges)} ON CATALOG {catalog} TO `{principal}`"
-            if args.dry_run:
-                print(f"[DRY RUN] Would execute: {sql}")
-            else:
-                spark.sql(sql)
-                print(f"✅ Granted {privileges} on catalog '{catalog}' to '{principal}'")
+            if catalog_privs:
+                sql = f"GRANT {', '.join(catalog_privs)} ON CATALOG {catalog} TO `{principal}`"
+                if args.dry_run:
+                    print(f"[DRY RUN] Would execute: {sql}")
+                else:
+                    spark.sql(sql)
+                    print(f"✅ Granted {catalog_privs} on catalog '{catalog}' to '{principal}'")
 
         for schema in schema_defs:
             full_name = f"{schema['catalog']}.{schema['name']}"
-            sql = f"GRANT {', '.join(privileges)} ON SCHEMA {full_name} TO `{principal}`"
-            if args.dry_run:
-                print(f"[DRY RUN] Would execute: {sql}")
-            else:
-                spark.sql(sql)
-                print(f"✅ Granted {privileges} on schema '{full_name}' to '{principal}'")
+            if schema_privs:
+                sql = f"GRANT {', '.join(schema_privs)} ON SCHEMA {full_name} TO `{principal}`"
+                if args.dry_run:
+                    print(f"[DRY RUN] Would execute: {sql}")
+                else:
+                    spark.sql(sql)
+                    print(f"✅ Granted {schema_privs} on schema '{full_name}' to '{principal}'")
 
 if __name__ == "__main__":
     main()

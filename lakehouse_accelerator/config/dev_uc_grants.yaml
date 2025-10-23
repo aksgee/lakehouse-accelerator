@@ -1,10 +1,10 @@
 - principal: emegirdigital@outlook.com
-  privileges:
+  catalog_privileges:
     - USE CATALOG
     - CREATE SCHEMA
+  schema_privileges:
     - SELECT
 
 - principal: arn:aws:iam::123456789012:user/lakehouse-sp-ml
-  privileges:
+  schema_privileges:
     - SELECT
-
