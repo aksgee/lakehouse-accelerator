@@ -28,4 +28,5 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          databricks bundle run lakehouse_accelerator/bootstrap_uc --target dev
+          cd lakehouse_accelerator
+          databricks bundle run bootstrap_uc --target dev
