@@ -13,7 +13,10 @@ variables:
 include:
   - configs/*.yaml
   - resources/jobs/*.yml
-  - src/lakehouse_accelerator/*.py
+
+sync:
+  include:
+    - src/lakehouse_accelerator/*.py
 
 targets:
   dev:
