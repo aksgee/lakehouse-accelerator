@@ -1,13 +1,13 @@
 catalogs:
   - name: lakehouse_catalog
-    comment: "Lakehouse accelerator catalog"
+    comment: "Lakehouse accelerator catalog for schema organization"
 
 schemas:
   - name: bronze
-    catalog: dev_catalog
+    catalog: lakehouse_catalog
 
   - name: silver
-    catalog: dev_catalog
+    catalog: lakehouse_catalog
 
   - name: gold
-    catalog: dev_catalog
+    catalog: lakehouse_catalog
