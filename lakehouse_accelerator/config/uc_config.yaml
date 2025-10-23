@@ -1,5 +1,5 @@
 catalogs:
-  - name: dev_catalog
+  - name: lakehouse_catalog
     comment: "Lakehouse accelerator catalog"
 
 schemas:
