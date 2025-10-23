@@ -1,0 +1,31 @@
+name: Deploy UC Job
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - lakehouse_accelerator/resources/jobs/bootstrap_uc.yml
+      - lakehouse_accelerator/configs/uc_config.yaml
+      - lakehouse_accelerator/configs/dev_uc_grants.yaml
+      - lakehouse_accelerator/src/lakehouse_accelerator/bootstrap_uc.py
+      - lakehouse_accelerator/src/lakehouse_accelerator/apply_grants.py
+
+jobs:
+  deploy_uc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Shared setup
+        uses: ./.github/actions/setup-dab
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+      - name: Run UC job
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks bundle run lakehouse_accelerator/bootstrap_uc --target dev

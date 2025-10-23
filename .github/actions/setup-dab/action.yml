@@ -1,0 +1,47 @@
+name: Setup Databricks Bundle
+description: Shared setup for Python and DAB validation
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Create virtual environment
+      run: python -m venv .venv
+      shell: bash
+
+    - name: Install dependencies
+      run: |
+        . .venv/bin/activate
+        pip install -r requirements.txt
+        pip install databricks-sdk pyyaml
+      shell: bash
+
+    - name: Install Databricks CLI (binary release)
+      shell: bash
+      run: |
+          set -e
+          VERSION="0.274.0"
+          FILE="databricks_cli_${VERSION}_linux_amd64"
+          curl -fsSL -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
+          unzip -q "${FILE}.zip" -d $RUNNER_TEMP/.bin
+          chmod +x "$RUNNER_TEMP/.bin/databricks"
+          echo "$RUNNER_TEMP/.bin" >> $GITHUB_PATH
+
+    - name: Validate Databricks bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          cd lakehouse_accelerator
+          databricks bundle validate --target dev
+
+    - name: Deploy Databricks bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          cd lakehouse_accelerator
+          databricks bundle deploy --target dev
