@@ -1,6 +1,6 @@
 catalogs:
   - name: lakehouse_catalog
-    comment: "Lakehouse accelerator catalog for schema organization"
+    comment: "Lakehouse accelerator catalog"
 
 schemas:
   - name: bronze
