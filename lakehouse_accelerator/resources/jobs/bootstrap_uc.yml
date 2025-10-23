@@ -8,7 +8,7 @@ resources:
           spark_python_task:
             python_file: ../../src/lakehouse_accelerator/bootstrap_uc.py
             parameters:
-              - "structure"
+              - "--structure"
               - ${var.uc_structure_path}
           environment_key: default
 
@@ -18,9 +18,9 @@ resources:
           spark_python_task:
             python_file: ../../src/lakehouse_accelerator/apply_grants.py
             parameters:
-              - "structure"
+              - "--structure"
               - ${var.uc_structure_path}
-              - "grants"
+              - "--grants"
               - ${var.grants_path}
           environment_key: default
 

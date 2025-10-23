@@ -23,5 +23,5 @@ targets:
     workspace:
       host: https://dbc-7ed9b5cf-407e.cloud.databricks.com/
     variables:
-      uc_structure_path: configs/dev_uc_structure.yaml
+      uc_structure_path: configs/uc_config.yaml
       grants_path: configs/dev_uc_grants.yaml
