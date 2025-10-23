@@ -3,11 +3,11 @@ from pyspark.sql import DataFrame
 
 
 def find_all_taxis() -> DataFrame:
-    return spark.read.table("samples.nyctaxi.trips")
+    print("samples.nyctaxi.trips")
 
 
 def main():
-    find_all_taxis().show(5)
+    find_all_taxis()
 
 
 if __name__ == "__main__":

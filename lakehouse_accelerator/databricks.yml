@@ -3,9 +3,6 @@ bundle:
   uuid: 8be560ee-8ee8-4149-9fd4-05d1ec61601d
 
 variables:
-  existing_cluster_id:
-    description: "Cluster ID (unused in serverless)"
-    type: complex
   uc_structure_path:
     description: "Path to YAML file with catalog + schema structure"
     type: complex
@@ -13,20 +10,15 @@ variables:
     description: "Path to YAML file with grant definitions"
     type: complex
 
-artifacts:
-  python_artifact:
-    type: whl
-    build: uv build --wheel
-
 include:
   - configs/*.yaml
   - resources/jobs/*.yml
+  - src/lakehouse_accelerator/*.py
 
 targets:
   dev:
     workspace:
       host: https://dbc-7ed9b5cf-407e.cloud.databricks.com/
     variables:
-      existing_cluster_id: "unused"
-      uc_structure_path: configs/uc_config.yaml
+      uc_structure_path: configs/dev_uc_structure.yaml
       grants_path: configs/dev_uc_grants.yaml
