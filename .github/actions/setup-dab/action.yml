@@ -3,25 +3,26 @@ description: Shared setup for Python and DAB validation
 runs:
   using: "composite"
   steps:
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Create virtual environment
-      run: python -m venv .venv
-      shell: bash
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        . .venv/bin/activate
-        pip install -r requirements.txt
-        pip install databricks-sdk pyyaml
-      shell: bash
+      - name: Create virtual environment
+        run: python -m venv .venv
 
-    - name: Install Databricks CLI (binary release)
-      shell: bash
-      run: |
+      - name: Install Python dependencies
+        run: |
+          . .venv/bin/activate
+          pip install -r requirements.txt
+          pip install databricks-sdk pyyaml
+
+      - name: Install Databricks CLI (binary release)
+        shell: bash
+        run: |
           set -e
           VERSION="0.274.0"
           FILE="databricks_cli_${VERSION}_linux_amd64"
@@ -30,7 +31,20 @@ runs:
           chmod +x "$RUNNER_TEMP/.bin/databricks"
           echo "$RUNNER_TEMP/.bin" >> $GITHUB_PATH
 
-    - name: Validate Databricks bundle
+      - name: Install uv (Python package manager)
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Confirm Databricks environment variables
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          echo "Databricks host: $DATABRICKS_HOST"
+          echo "Databricks token is set: ${#DATABRICKS_TOKEN} characters"
+
+      - name: Validate Databricks bundle
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
@@ -38,7 +52,7 @@ runs:
           cd lakehouse_accelerator
           databricks bundle validate --target dev
 
-    - name: Deploy Databricks bundle
+      - name: Deploy Databricks bundle
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
