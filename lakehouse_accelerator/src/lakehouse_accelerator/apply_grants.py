@@ -1,15 +1,15 @@
 import argparse
 import yaml
-from databricks.sdk import WorkspaceClient
-from databricks.sdk.errors import NotFound
+from pyspark.sql import SparkSession
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--structure", required=True, help="Path to YAML file with catalog + schema structure")
     parser.add_argument("--grants", required=True, help="Path to YAML file with grant definitions")
+    parser.add_argument("--dry-run", action="store_true", help="Print actions without executing")
     args = parser.parse_args()
 
-    w = WorkspaceClient()
+    spark = SparkSession.builder.getOrCreate()
 
     with open(args.structure, "r") as f:
         cfg = yaml.safe_load(f)
@@ -24,19 +24,21 @@ def main():
         privileges = grant["privileges"]
 
         for catalog in catalog_names:
-            try:
-                w.grants.update(full_name=catalog, privileges=privileges, principal=principal)
+            sql = f"GRANT {', '.join(privileges)} ON CATALOG {catalog} TO `{principal}`"
+            if args.dry_run:
+                print(f"[DRY RUN] Would execute: {sql}")
+            else:
+                spark.sql(sql)
                 print(f"✅ Granted {privileges} on catalog '{catalog}' to '{principal}'")
-            except Exception as e:
-                print(f"❌ Failed to grant on catalog '{catalog}': {e}")
 
         for schema in schema_defs:
             full_name = f"{schema['catalog']}.{schema['name']}"
-            try:
-                w.grants.update(full_name=full_name, privileges=privileges, principal=principal)
+            sql = f"GRANT {', '.join(privileges)} ON SCHEMA {full_name} TO `{principal}`"
+            if args.dry_run:
+                print(f"[DRY RUN] Would execute: {sql}")
+            else:
+                spark.sql(sql)
                 print(f"✅ Granted {privileges} on schema '{full_name}' to '{principal}'")
-            except Exception as e:
-                print(f"❌ Failed to grant on schema '{full_name}': {e}")
 
 if __name__ == "__main__":
     main()
