@@ -7,3 +7,8 @@
 - principal: arn:aws:iam::123456789012:user/lakehouse-sp-ml
   privileges:
     - SELECT
+
+- principal: arn:aws:iam::123456789012:user/lakehouse-sp-ingest
+  privileges:
+    - CREATE TABLE
+    - SELECT
