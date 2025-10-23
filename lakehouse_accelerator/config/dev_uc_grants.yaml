@@ -4,4 +4,7 @@
     - CREATE SCHEMA
     - SELECT
 
+- principal: arn:aws:iam::123456789012:user/lakehouse-sp-ml
+  privileges:
+    - SELECT
 

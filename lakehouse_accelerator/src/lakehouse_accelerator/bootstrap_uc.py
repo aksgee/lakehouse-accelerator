@@ -41,7 +41,7 @@ def main(structure, location_root, dry_run):
                 w.catalogs.create(
                     name=name,
                     comment=comment,
-                    storage_location=storage_location
+                    storage_root=storage_location
                 )
                 print(f"🆕 Catalog '{name}' created.")
         except Exception as e:
